@@ -1,6 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
     const tg = window.Telegram.WebApp;  // Инициализация Web App Telegram
 
+    // При загрузке Web App отправляем сообщение боту
+    tg.sendData("Веб подключён и работает корректно");
+    console.log("Отправлено сообщение: Веб подключён и работает корректно");
+
     // Настраиваем отображение кнопки "Закрыть" в Telegram Web App
     tg.MainButton.text = "Закрыть магазин";
     tg.MainButton.show();
@@ -27,7 +31,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     ];
 
-    // Переменные для отображения товаров
     let currentProductIndex = 0;
 
     // Функция для отображения товара
@@ -47,11 +50,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Обработчик нажатия кнопки "Лайк"
     document.getElementById("like-button").addEventListener("click", function () {
         const product = products[currentProductIndex];
-        
-        // Отправляем данные о лайке в бота
         const dataToSend = JSON.stringify({ action: "like", productId: product.id });
         tg.sendData(dataToSend);  // Отправляем данные в бота
-        
         console.log("Данные отправлены в бот: ", dataToSend);
         showNextProduct();  // Показать следующий товар
     });
@@ -59,11 +59,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Обработчик нажатия кнопки "Дизлайк"
     document.getElementById("dislike-button").addEventListener("click", function () {
         const product = products[currentProductIndex];
-        
-        // Отправляем данные о дизлайке в бота
         const dataToSend = JSON.stringify({ action: "dislike", productId: product.id });
         tg.sendData(dataToSend);  // Отправляем данные в бота
-        
         console.log("Данные отправлены в бот: ", dataToSend);
         showNextProduct();  // Показать следующий товар
     });
