@@ -1,51 +1,51 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const productName = document.getElementById("product-name");
-    const productDescription = document.getElementById("product-description");
-    const productPrice = document.getElementById("product-price");
-    const productImage = document.getElementById("product-image");
+    const tg = window.Telegram.WebApp;
 
-    let currentProductIndex = 0;
+    // Функция для получения товаров с сервера
+    async function fetchProducts() {
+        try {
+            // Здесь будет отправлен запрос на сервер бота
+            const response = await fetch('http://localhost:8000/products');  // Локальный сервер, где работает бот
+            const data = await response.json();
 
-    const products = [
-        {
-            name: "Товар 1",
-            description: "Описание товара 1",
-            price: 100,
-            imageUrl: "https://via.placeholder.com/400x300",
-        },
-        {
-            name: "Товар 2",
-            description: "Описание товара 2",
-            price: 200,
-            imageUrl: "https://via.placeholder.com/400x300",
-        },
-        // Можно добавить больше товаров
-    ];
-
-    function displayProduct(product) {
-        productName.textContent = product.name;
-        productDescription.textContent = product.description;
-        productPrice.textContent = product.price.toFixed(2);
-        productImage.src = product.imageUrl;
+            // Отображение товаров
+            displayProducts(data.products);
+        } catch (error) {
+            console.error("Ошибка при получении товаров:", error);
+        }
     }
 
-    function handleLike() {
-        alert("Вы лайкнули " + products[currentProductIndex].name);
-        showNextProduct();
+    // Функция для отображения товаров
+    function displayProducts(products) {
+        const productName = document.getElementById("product-name");
+        const productDescription = document.getElementById("product-description");
+        const productPrice = document.getElementById("product-price");
+        const productImage = document.getElementById("product-image");
+
+        let currentProductIndex = 0;
+
+        function showNextProduct() {
+            currentProductIndex = (currentProductIndex + 1) % products.length;
+            const product = products[currentProductIndex];
+            productName.textContent = product.name;
+            productDescription.textContent = product.description;
+            productPrice.textContent = product.price.toFixed(2);
+            productImage.src = product.imageUrl;
+        }
+
+        document.getElementById("like-button").addEventListener("click", function () {
+            tg.sendData(JSON.stringify({ action: "like", product: products[currentProductIndex] }));
+            showNextProduct();
+        });
+
+        document.getElementById("dislike-button").addEventListener("click", function () {
+            tg.sendData(JSON.stringify({ action: "dislike", product: products[currentProductIndex] }));
+            showNextProduct();
+        });
+
+        showNextProduct();  // Показываем первый товар
     }
 
-    function handleDislike() {
-        alert("Вы дизлайкнули " + products[currentProductIndex].name);
-        showNextProduct();
-    }
-
-    function showNextProduct() {
-        currentProductIndex = (currentProductIndex + 1) % products.length;
-        displayProduct(products[currentProductIndex]);
-    }
-
-    document.getElementById("like-button").addEventListener("click", handleLike);
-    document.getElementById("dislike-button").addEventListener("click", handleDislike);
-
-    displayProduct(products[currentProductIndex]);
+    // Получение товаров при загрузке Web App
+    fetchProducts();
 });
