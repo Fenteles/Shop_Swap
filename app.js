@@ -1,12 +1,27 @@
 document.addEventListener("DOMContentLoaded", function () {
     const tg = window.Telegram.WebApp;  // Инициализация Web App Telegram
 
-    // Обработчик кнопки "Проверить связь"
-    document.getElementById("check-connection").addEventListener("click", function () {
-        // Отправляем сообщение в логи бота
-        tg.sendData("Связь проверена через Web App.");
-        console.log("Сообщение отправлено в бота: Связь проверена через Web App.");
+    // Получаем данные товара с ID = 1 (заглушка)
+    const product = {
+        id: 1,
+        name: "Товар 1",
+        description: "Описание товара 1",
+        price: 100,
+        imageUrl: "https://via.placeholder.com/400x300",
+    };
+
+    // Отображение товара
+    document.getElementById("product-name").textContent = product.name;
+    document.getElementById("product-description").textContent = product.description;
+    document.getElementById("product-price").textContent = product.price.toFixed(2);
+    document.getElementById("product-image").src = product.imageUrl;
+
+    // Обработчик нажатия кнопки "Лайк"
+    document.getElementById("like-button").addEventListener("click", function () {
+        const dataToSend = JSON.stringify({ action: "like", productId: product.id });
+        tg.sendData(dataToSend);  // Отправляем данные в бота
+        console.log("Данные отправлены в бот: ", dataToSend);
     });
 
-    console.log("Web App загружено и работает.");
+    console.log("Web App загружен и готов к работе.");
 });
