@@ -10,30 +10,46 @@
 <body>
     <h1>Добро пожаловать в наш магазин!</h1>
     <button id="likeButton">Клик</button>
+    <div id="logArea" style="margin-top: 20px; padding: 10px; border: 1px solid black; height: 200px; overflow: auto;">
+        <p>Логи:</p>
+    </div>
 
     <script>
-        // Инициализация Telegram Web App
         const tg = window.Telegram.WebApp;
+        const logArea = document.getElementById('logArea');
+
+        // Функция для вывода сообщений в Web App
+        function logMessage(message) {
+            const p = document.createElement('p');
+            p.textContent = message;
+            logArea.appendChild(p);
+            logArea.scrollTop = logArea.scrollHeight;  // Автопрокрутка вниз
+        }
 
         // Добавляем обработчик на кнопку
         document.getElementById('likeButton').addEventListener('click', function() {
-            // Отправляем запрос на сервер с информацией о пользователе
-            fetch('http://192.168.43.176:5000/api/like', {  // Заменяем localhost на IP-адрес сервера
+            const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.username : 'Неизвестный пользователь';
+            logMessage(`Отправляем запрос на сервер с username: ${username}`);
+
+            fetch('http://192.168.43.176:5000/api/like', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username: tg.initDataUnsafe.user.username })  // Передаем username пользователя
+                body: JSON.stringify({ username: username })  // Передаем username пользователя
             })
             .then(response => {
+                logMessage(`Ответ от сервера: статус ${response.status}`);
                 if (response.ok) {
+                    logMessage('Лайк успешно добавлен!');
                     alert('Лайк успешно добавлен!');
                 } else {
+                    logMessage('Ошибка при добавлении лайка.');
                     alert('Ошибка при добавлении лайка.');
                 }
             })
             .catch(error => {
-                console.error('Ошибка:', error);
+                logMessage(`Ошибка при отправке запроса: ${error}`);
                 alert('Ошибка при добавлении лайка.');
             });
         });
