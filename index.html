@@ -1,52 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>Магазин</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин товаров</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1 id="product-name"></h1>
-    <img id="product-photo" src="" alt="Product Image" style="max-width: 300px;">
-    <p id="product-description"></p>
-    <p><strong>Цена:</strong> <span id="product-price"></span> UAH</p>
-
-    <div>
-        <button id="like-button">Лайк</button>
-        <button id="dislike-button">Дизлайк</button>
+    <div class="container">
+        <header>
+            <h1>Добро пожаловать в магазин товаров!</h1>
+        </header>
+        <div id="product-card">
+            <img id="product-image" src="" alt="Фото товара">
+            <h2 id="product-name">Название товара</h2>
+            <p id="product-description">Описание товара</p>
+            <p><strong>Цена:</strong> <span id="product-price">0.00</span> руб.</p>
+            <div class="buttons">
+                <button id="like-button">👍 Лайк</button>
+                <button id="dislike-button">👎 Дизлайк</button>
+            </div>
+        </div>
     </div>
 
-    <script>
-        // Получаем данные из URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const name = urlParams.get('name') || 'Гость';
-        const productName = urlParams.get('product_name') || 'Неизвестный товар';
-        const description = urlParams.get('description') || 'Описание отсутствует';
-        const photoUrl = urlParams.get('photo_url') || 'https://via.placeholder.com/300';
-        const price = urlParams.get('price') || '0';
-
-        // Отображаем данные на сайте
-        document.getElementById('product-name').innerText = productName;
-        document.getElementById('product-description').innerText = description;
-        document.getElementById('product-photo').src = photoUrl;
-        document.getElementById('product-price').innerText = price;
-
-        // Функция для загрузки нового товара
-        function loadNewProduct() {
-            // Получаем новый случайный товар
-            fetch(`https://api.telegram.org/bot<API_TOKEN>/getUpdates`).then(response => response.json()).then(data => {
-                const newProduct = data.result[0]; // Получаем новый товар из бота
-                const newProductName = newProduct.product_name;
-                const newProductDescription = newProduct.description;
-                const newProductPhotoUrl = newProduct.photo_url;
-                const newProductPrice = newProduct.price;
-
-                // Обновляем URL с новыми данными товара
-                window.location.href = `https://fenteles.github.io/Shop_Swap/?name=${name}&product_name=${newProductName}&description=${newProductDescription}&photo_url=${newProductPhotoUrl}&price=${newProductPrice}`;
-            });
-        }
-
-        // Добавляем обработчики событий на кнопки
-        document.getElementById('like-button').addEventListener('click', loadNewProduct);
-        document.getElementById('dislike-button').addEventListener('click', loadNewProduct);
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
