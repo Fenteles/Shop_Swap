@@ -9,6 +9,11 @@
     <p id="product-description"></p>
     <p><strong>Цена:</strong> <span id="product-price"></span> UAH</p>
 
+    <div>
+        <button id="like-button">Лайк</button>
+        <button id="dislike-button">Дизлайк</button>
+    </div>
+
     <script>
         // Получаем данные из URL
         const urlParams = new URLSearchParams(window.location.search);
@@ -23,6 +28,16 @@
         document.getElementById('product-description').innerText = description;
         document.getElementById('product-photo').src = photoUrl;
         document.getElementById('product-price').innerText = price;
+
+        // Функция для обновления товара при нажатии на кнопки
+        function loadNewProduct() {
+            // Перенаправляем пользователя на тот же сайт, но с новым случайным товаром
+            window.location.href = `https://fenteles.github.io/Shop_Swap/?name=${name}`;
+        }
+
+        // Добавляем обработчики событий на кнопки
+        document.getElementById('like-button').addEventListener('click', loadNewProduct);
+        document.getElementById('dislike-button').addEventListener('click', loadNewProduct);
     </script>
 </body>
 </html>
