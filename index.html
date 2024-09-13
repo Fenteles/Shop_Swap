@@ -15,22 +15,15 @@
         // Инициализация Telegram Web App
         const tg = window.Telegram.WebApp;
 
-        // Получаем данные о пользователе
-        tg.ready();  // Сообщает, что WebApp готов к использованию
-        const user = tg.initDataUnsafe?.user || { username: "Неизвестный" };  // Получаем никнейм пользователя
-
         // Добавляем обработчик на кнопку
         document.getElementById('likeButton').addEventListener('click', function() {
-            // Логирование в консоль
-            console.log(`Пользователь ${user.username} нажал Клик`);
-
-            // Дополнительные действия, например, запрос к серверу для увеличения лайков
-            fetch('/api/like', {
+            // Отправляем запрос на сервер с информацией о пользователе
+            fetch('http://192.168.43.176:5000/api/like', {  // Заменяем localhost на IP-адрес сервера
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username: user.username })
+                body: JSON.stringify({ username: tg.initDataUnsafe.user.username })  // Передаем username пользователя
             })
             .then(response => {
                 if (response.ok) {
@@ -41,6 +34,7 @@
             })
             .catch(error => {
                 console.error('Ошибка:', error);
+                alert('Ошибка при добавлении лайка.');
             });
         });
     </script>
