@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Магазин</title>
+</head>
+<body>
+    <h1 id="greeting"></h1>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const name = urlParams.get('name') || 'Гость';
+        document.getElementById('greeting').innerText = `Привет, ${name}!`;
+    </script>
+</body>
+</html>
