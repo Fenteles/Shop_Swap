@@ -4,55 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop Swap</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script> <!-- Telegram Web App SDK -->
 </head>
 <body>
     <h1>Добро пожаловать в наш магазин!</h1>
-    <button id="likeButton">Клик</button>
-    <div id="logArea" style="margin-top: 20px; padding: 10px; border: 1px solid black; height: 200px; overflow: auto;">
-        <p>Логи:</p>
+
+    <!-- Контейнер для товаров -->
+    <div id="productsContainer" style="display: flex; flex-wrap: wrap; justify-content: center;">
+        <!-- Товары будут динамически добавляться сюда -->
     </div>
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        const logArea = document.getElementById('logArea');
-
-        // Функция для вывода сообщений в Web App
-        function logMessage(message) {
-            const p = document.createElement('p');
-            p.textContent = message;
-            logArea.appendChild(p);
-            logArea.scrollTop = logArea.scrollHeight;  // Автопрокрутка вниз
-        }
-
-        // Добавляем обработчик на кнопку
-        document.getElementById('likeButton').addEventListener('click', function() {
-            const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.username : 'Неизвестный пользователь';
-            logMessage(`Отправляем запрос на сервер с username: ${username}`);
-
-            fetch('https://d768-46-211-253-201.ngrok-free.app/api/like', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username: username })  // Передаем username пользователя
-            })
-            .then(response => {
-                logMessage(`Ответ от сервера: статус ${response.status}`);
-                if (response.ok) {
-                    logMessage('Лайк успешно добавлен!');
-                    alert('Лайк успешно добавлен!');
-                } else {
-                    logMessage('Ошибка при добавлении лайка.');
-                    alert('Ошибка при добавлении лайка.');
-                }
-            })
-            .catch(error => {
-                logMessage(`Ошибка при отправке запроса: ${error}`);
-                alert('Ошибка при добавлении лайка.');
-            });
-        });
-    </script>
+    <!-- Подключаем файл с JS кодом -->
+    <script src="app.js"></script>
 </body>
 </html>
