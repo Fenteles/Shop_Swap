@@ -65,8 +65,16 @@ function createProductCard(product) {
 
 // Запрос товаров с сервера
 fetch('https://7222-46-211-225-18.ngrok-free.app/api/products')
-    .then(response => response.json())
+    .then(response => {
+        // Проверка типа ответа
+        if (!response.ok) {
+            throw new Error(`HTTP ошибка! Статус: ${response.status}`);
+        }
+        // Пробуем распарсить ответ как JSON
+        return response.json();
+    })
     .then(data => {
+        console.log("Ответ от сервера:", data);  // Выводим ответ сервера в консоль для проверки
         if (data.status === 'success') {
             const productsContainer = document.getElementById('productsContainer');
             data.products.forEach(product => {
@@ -81,5 +89,5 @@ fetch('https://7222-46-211-225-18.ngrok-free.app/api/products')
     })
     .catch(error => {
         logMessage(`Ошибка при запросе товаров: ${error}`);
-        alert('Ошибка при загрузке товаров.');
+        alert(`Ошибка при загрузке товаров: ${error}`);
     });
