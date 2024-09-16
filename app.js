@@ -1,3 +1,42 @@
+// Инициализация Telegram WebApp
+const tg = window.Telegram.WebApp;
+const logArea = document.getElementById('logArea');
+
+// Функция для вывода сообщений в лог
+function logMessage(message) {
+    const p = document.createElement('p');
+    p.textContent = message;
+    logArea.appendChild(p);
+    logArea.scrollTop = logArea.scrollHeight;  // Автопрокрутка вниз
+}
+
+// Обработчик для кнопки "Клик"
+document.getElementById('likeButton').addEventListener('click', function() {
+    const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.username : 'Неизвестный пользователь';
+    logMessage(`Отправляем запрос на сервер с username: ${username}`);
+
+    fetch('https://7222-46-211-225-18.ngrok-free.app/api/like', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username: username })  // Передаем username пользователя
+    })
+    .then(response => response.json())
+    .then(data => {
+        logMessage(`Ответ от сервера: ${data.message}`);
+        if (data.status === 'success') {
+            alert('Лайк успешно добавлен!');
+        } else {
+            alert('Ошибка при добавлении лайка.');
+        }
+    })
+    .catch(error => {
+        logMessage(`Ошибка при отправке запроса: ${error}`);
+        alert('Ошибка при добавлении лайка.');
+    });
+});
+
 // Функция для создания карточки товара
 function createProductCard(product) {
     const card = document.createElement('div');
@@ -34,11 +73,13 @@ fetch('https://7222-46-211-225-18.ngrok-free.app/api/products')
                 const productCard = createProductCard(product);
                 productsContainer.appendChild(productCard);
             });
+            logMessage('Товары успешно загружены.');
         } else {
+            logMessage('Ошибка при загрузке товаров.');
             alert('Ошибка при загрузке товаров.');
         }
     })
     .catch(error => {
-        console.error('Ошибка при запросе товаров:', error);
+        logMessage(`Ошибка при запросе товаров: ${error}`);
         alert('Ошибка при загрузке товаров.');
     });
