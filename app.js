@@ -1,28 +1,44 @@
-<script>
-    const tg = window.Telegram.WebApp;
+// Функция для создания карточки товара
+function createProductCard(product) {
+    const card = document.createElement('div');
+    card.classList.add('product-card');  // Добавим класс для стилей
 
-    document.getElementById('likeButton').addEventListener('click', function() {
-        const username = tg.initDataUnsafe.user.username;
-        console.log("Отправляем запрос на сервер с username:", username);
+    const img = document.createElement('img');
+    img.src = product.photo_url;
+    img.alt = product.name;
 
-        fetch('http://192.168.43.176:5000/api/like', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username: username })  // Передаем username пользователя
-        })
-        .then(response => {
-            console.log("Ответ от сервера:", response);
-            if (response.ok) {
-                alert('Лайк успешно добавлен!');
-            } else {
-                alert('Ошибка при добавлении лайка.');
-            }
-        })
-        .catch(error => {
-            console.error('Ошибка при отправке запроса:', error);
-            alert('Ошибка при добавлении лайка.');
-        });
+    const name = document.createElement('h2');
+    name.textContent = product.name;
+
+    const description = document.createElement('p');
+    description.textContent = product.description;
+
+    const price = document.createElement('p');
+    price.textContent = `Цена: ${product.price} руб.`;
+
+    card.appendChild(img);
+    card.appendChild(name);
+    card.appendChild(description);
+    card.appendChild(price);
+
+    return card;
+}
+
+// Запрос товаров с сервера
+fetch('https://7222-46-211-225-18.ngrok-free.app/api/products')
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            const productsContainer = document.getElementById('productsContainer');
+            data.products.forEach(product => {
+                const productCard = createProductCard(product);
+                productsContainer.appendChild(productCard);
+            });
+        } else {
+            alert('Ошибка при загрузке товаров.');
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка при запросе товаров:', error);
+        alert('Ошибка при загрузке товаров.');
     });
-</script>
