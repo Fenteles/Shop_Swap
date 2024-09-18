@@ -19,7 +19,11 @@ function loadProductData() {
         }
     })
     .then(response => {
-        if (response.headers.get('Content-Type').includes('application/json')) {
+        // Выводим все заголовки ответа для анализа
+        console.log(response.headers);
+
+        // Проверяем заголовок Content-Type
+        if (response.headers.get('Content-Type') && response.headers.get('Content-Type').includes('application/json')) {
             return response.json();
         } else {
             throw new Error("Получен не JSON-ответ");
@@ -36,7 +40,6 @@ function loadProductData() {
         logMessage(`Ошибка при загрузке данных о товаре: ${error}`);
     });
 }
-
 // Добавляем обработчик на кнопку
 document.getElementById('likeButton').addEventListener('click', function() {
     const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.username : 'Неизвестный пользователь';
