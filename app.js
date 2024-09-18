@@ -19,34 +19,25 @@ function logMessage(message) {
     logArea.scrollTop = logArea.scrollHeight;  // Автопрокрутка вниз
 }
 
-function loadProductData() {
-    fetch('https://54e2-46-211-248-233.ngrok-free.app/products/id/3', {
+function loadProductDataXML() {
+    fetch('https://54e2-46-211-248-233.ngrok-free.app/products/id/3/xml', {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Accept': 'application/xml'
         }
     })
     .then(response => {
-        // Логируем заголовки ответа на страницу
-        logMessage(`Заголовки ответа: ${Array.from(response.headers.entries()).map(h => `${h[0]}: ${h[1]}`).join(', ')}`);
-
-        // Проверяем, что Content-Type содержит "application/json"
-        const contentType = response.headers.get('Content-Type');
-        if (contentType && contentType.includes('application/json')) {
-            return response.json();
-        } else {
-            throw new Error("Получен не JSON-ответ, Content-Type: " + contentType);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
+        return response.text();
     })
-    .then(product => {
-        // Обновляем заголовок с данными о товаре
-        const productTitle = document.getElementById('productTitle');
-        productTitle.textContent = `${product.name}, ${product.description}, Цена: ${product.price}`;
-
-        logMessage(`Данные о товаре загружены: ${product.name}, ${product.description}, Цена: ${product.price}`);
+    .then(data => {
+        logMessage(`XML Data Loaded: ${data}`);
+        // Парсинг XML и обновление DOM здесь, если нужно
     })
     .catch(error => {
-        logMessage(`Ошибка при загрузке данных о товаре: ${error}`);
+        logMessage(`Ошибка при загрузке данных: ${error}`);
     });
 }
 
