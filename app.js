@@ -18,7 +18,13 @@ function loadProductData() {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (response.headers.get('Content-Type').includes('application/json')) {
+            return response.json();
+        } else {
+            throw new Error("Получен не JSON-ответ");
+        }
+    })
     .then(product => {
         // Обновляем заголовок с данными о товаре
         const productTitle = document.getElementById('productTitle');
