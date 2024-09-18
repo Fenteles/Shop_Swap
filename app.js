@@ -11,6 +11,14 @@ function logMessage(message) {
 }
 
 // Функция для загрузки данных о товаре с сервера
+function logMessage(message) {
+    const logArea = document.getElementById('logArea');
+    const p = document.createElement('p');
+    p.textContent = message;
+    logArea.appendChild(p);
+    logArea.scrollTop = logArea.scrollHeight;  // Автопрокрутка вниз
+}
+
 function loadProductData() {
     fetch('https://54e2-46-211-248-233.ngrok-free.app/products/id/3', {
         method: 'GET',
@@ -19,14 +27,15 @@ function loadProductData() {
         }
     })
     .then(response => {
-        // Выводим все заголовки ответа для анализа
-        console.log(response.headers);
+        // Логируем заголовки ответа на страницу
+        logMessage(`Заголовки ответа: ${Array.from(response.headers.entries()).map(h => `${h[0]}: ${h[1]}`).join(', ')}`);
 
-        // Проверяем заголовок Content-Type
-        if (response.headers.get('Content-Type') && response.headers.get('Content-Type').includes('application/json')) {
+        // Проверяем, что Content-Type содержит "application/json"
+        const contentType = response.headers.get('Content-Type');
+        if (contentType && contentType.includes('application/json')) {
             return response.json();
         } else {
-            throw new Error("Получен не JSON-ответ");
+            throw new Error("Получен не JSON-ответ, Content-Type: " + contentType);
         }
     })
     .then(product => {
@@ -40,6 +49,10 @@ function loadProductData() {
         logMessage(`Ошибка при загрузке данных о товаре: ${error}`);
     });
 }
+
+// Загружаем данные о товаре при загрузке страницы
+loadProductData();
+
 // Добавляем обработчик на кнопку
 document.getElementById('likeButton').addEventListener('click', function() {
     const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.username : 'Неизвестный пользователь';
