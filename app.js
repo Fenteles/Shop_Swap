@@ -1,28 +1,32 @@
 <script>
     const tg = window.Telegram.WebApp;
+    const logArea = document.getElementById('logArea');
 
+    // Функция для вывода сообщений в Web App
+    function logMessage(message) {
+        const p = document.createElement('p');
+        p.textContent = message;
+        logArea.appendChild(p);
+        logArea.scrollTop = logArea.scrollHeight;  // Автопрокрутка вниз
+    }
+
+    // Добавляем обработчик на кнопку
     document.getElementById('likeButton').addEventListener('click', function() {
-        const username = tg.initDataUnsafe.user.username;
-        console.log("Отправляем запрос на сервер с username:", username);
+        logMessage('Отправляем запрос боту для получения случайного товара...');
 
-        fetch('http://192.168.43.176:5000/api/like', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username: username })  // Передаем username пользователя
-        })
-        .then(response => {
-            console.log("Ответ от сервера:", response);
-            if (response.ok) {
-                alert('Лайк успешно добавлен!');
-            } else {
-                alert('Ошибка при добавлении лайка.');
-            }
+        // Запрашиваем у бота случайный ID товара
+        fetch('https://54e2-46-211-248-233.ngrok-free.app/api/random_product_id')
+        .then(response => response.json())
+        .then(data => {
+            const productId = data.product_id;
+            logMessage(`Получен случайный ID товара: ${productId}`);
+
+            // Переходим на страницу товара
+            const productUrl = `https://54e2-46-211-248-233.ngrok-free.app/api/products/id/${productId}`;
+            window.location.href = productUrl;
         })
         .catch(error => {
-            console.error('Ошибка при отправке запроса:', error);
-            alert('Ошибка при добавлении лайка.');
+            logMessage(`Ошибка при получении случайного товара: ${error}`);
         });
     });
 </script>
