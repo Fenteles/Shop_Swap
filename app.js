@@ -13,7 +13,7 @@ function logMessage(message) {
 
 // Функция для загрузки данных о товаре в формате XML
 function loadProductDataXML() {
-    fetch('https://54e2-46-211-248-233.ngrok-free.app/products/id/3/xml', {
+    fetch('https://four-planets-run.loca.lt/products/id/3/xml', {
         method: 'GET',
         headers: {
             'Accept': 'application/xml'
@@ -61,7 +61,7 @@ document.getElementById('likeButton').addEventListener('click', function() {
     const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.username : 'Неизвестный пользователь';
     logMessage(`Отправляем запрос на сервер с username: ${username}`);
 
-    fetch('https://54e2-46-211-248-233.ngrok-free.app/api/like', {
+    fetch('https://four-planets-run.loca.lt/api/like', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -83,6 +83,3 @@ document.getElementById('likeButton').addEventListener('click', function() {
         alert('Ошибка при добавлении лайка.');
     });
 });
-
-// Загружаем данные о товаре при загрузке страницы
-loadProductData();
