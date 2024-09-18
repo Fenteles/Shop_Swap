@@ -13,7 +13,7 @@ function logMessage(message) {
 
 // Функция для загрузки данных о товаре в формате XML
 function loadProductDataXML() {
-    fetch('https://four-planets-run.loca.lt/products/id/3/xml', {
+    fetch('https://46de4c92a375d345ff1a9011a7197687.serveo.net/products/id/3/xml', {
         method: 'GET',
         headers: {
             'Accept': 'application/xml'
@@ -61,7 +61,7 @@ document.getElementById('likeButton').addEventListener('click', function() {
     const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.username : 'Неизвестный пользователь';
     logMessage(`Отправляем запрос на сервер с username: ${username}`);
 
-    fetch('https://four-planets-run.loca.lt/api/like', {
+    fetch('https://46de4c92a375d345ff1a9011a7197687.serveo.net/api/like', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
