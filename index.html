@@ -31,7 +31,7 @@
             const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.username : 'Неизвестный пользователь';
             logMessage(`Отправляем запрос на сервер с username: ${username}`);
 
-            fetch('https://54e2-46-211-248-233.ngrok-free.app/like', {
+            fetch('https://54e2-46-211-248-233.ngrok-free.app/api/like', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
