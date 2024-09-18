@@ -15,7 +15,7 @@ document.getElementById('likeButton').addEventListener('click', function() {
     const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.username : 'Неизвестный пользователь';
     logMessage(`Отправляем запрос на сервер с username: ${username}`);
 
-    fetch('https://003f-46-211-231-218.ngrok-free.app/api/like', {
+    fetch('https://4347-46-211-231-218.ngrok-free.app/api/like', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -64,7 +64,7 @@ function createProductCard(product) {
 }
 
 // Запрос товаров с сервера
-fetch('https://003f-46-211-231-218.ngrok-free.app/api/products')
+fetch('https://4347-46-211-231-218.ngrok-free.app/api/products')
     .then(response => {
         // Логируем содержимое ответа перед парсингом как JSON
         return response.text().then(text => {
