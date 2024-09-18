@@ -10,6 +10,27 @@ function logMessage(message) {
     logArea.scrollTop = logArea.scrollHeight;  // Автопрокрутка вниз
 }
 
+// Функция для загрузки данных о товаре с сервера
+function loadProductData() {
+    fetch('https://54e2-46-211-248-233.ngrok-free.app/products/id/3', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(product => {
+        // Обновляем заголовок с данными о товаре
+        const productTitle = document.getElementById('productTitle');
+        productTitle.textContent = `${product.name}, ${product.description}, Цена: ${product.price}`;
+
+        logMessage(`Данные о товаре загружены: ${product.name}, ${product.description}, Цена: ${product.price}`);
+    })
+    .catch(error => {
+        logMessage(`Ошибка при загрузке данных о товаре: ${error}`);
+    });
+}
+
 // Добавляем обработчик на кнопку
 document.getElementById('likeButton').addEventListener('click', function() {
     const username = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.username : 'Неизвестный пользователь';
@@ -37,3 +58,6 @@ document.getElementById('likeButton').addEventListener('click', function() {
         alert('Ошибка при добавлении лайка.');
     });
 });
+
+// Загружаем данные о товаре при загрузке страницы
+loadProductData();
