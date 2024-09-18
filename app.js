@@ -2,7 +2,7 @@
 const tg = window.Telegram.WebApp;
 const logArea = document.getElementById('logArea');
 
-// Функция для вывода сообщений в лог
+// Функция для вывода сообщений в лог Web App
 function logMessage(message) {
     const p = document.createElement('p');
     p.textContent = message;
@@ -79,13 +79,13 @@ fetch('https://4347-46-211-231-218.ngrok-free.app/api/products')
         });
     })
     .then(data => {
-        if (data && data.status === 'success') {
+        logMessage("Ответ от сервера: товары загружены.");
+        if (data.status === 'success') {
             const productsContainer = document.getElementById('productsContainer');
             data.products.forEach(product => {
                 const productCard = createProductCard(product);
                 productsContainer.appendChild(productCard);
             });
-            logMessage('Товары успешно загружены.');
         } else {
             logMessage('Ошибка при загрузке товаров.');
             alert('Ошибка при загрузке товаров.');
@@ -93,5 +93,5 @@ fetch('https://4347-46-211-231-218.ngrok-free.app/api/products')
     })
     .catch(error => {
         logMessage(`Ошибка при запросе товаров: ${error}`);
-        alert(`Ошибка при загрузке товаров: ${error}`);
+        console.error('Ошибка при запросе:', error);
     });
